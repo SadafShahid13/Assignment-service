@@ -9,15 +9,15 @@ const port = 1005;
  app.use(express.urlencoded({ extended: true}));
 
 //DataBase Stuff
-// const url = "mongodb://admin:admin@authexpress-shard-00-00.l8kxn.mongodb.net:27017,authexpress-shard-00-01.l8kxn.mongodb.net:27017,authexpress-shard-00-02.l8kxn.mongodb.net:27017/enrolledstudents?ssl=true&replicaSet=atlas-260l3u-shard-0&authSource=admin&retryWrites=true&w=majority";
-// mongoose
-//     .connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
-//     .then(()=>{
-//         console.log("DataBase for Enroll service connected");
-//     })
-//     .catch((error)=>{
-//         console.log(e);
-//     })
+const url = "mongodb://admin:admin@authexpress-shard-00-00.l8kxn.mongodb.net:27017,authexpress-shard-00-01.l8kxn.mongodb.net:27017,authexpress-shard-00-02.l8kxn.mongodb.net:27017/assignments?ssl=true&replicaSet=atlas-260l3u-shard-0&authSource=admin&retryWrites=true&w=majority";
+mongoose
+    .connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(()=>{
+        console.log("DataBase for assignment service connected");
+    })
+    .catch((error)=>{
+        console.log(e);
+    })
 
 app.get("/", (req,res)=>{
     res.sendfile('assignmentform.html');
@@ -26,8 +26,23 @@ app.get("/", (req,res)=>{
 
 
 app.post("/", (req,res)=>{
-    const data = req.body  
+    const data = req.body
+    const rawdate =req.body.dateOfSubmission
+    const date = new Date(rawdate)  
     console.log(req.body)
+    const assignments = require('./assignment.model');
+
+    var assignment = new assignments(data);
+    assignment.dateOfSubmission = date
+
+     
+    assignment.save().then(()=>{
+        console.log("Assigned Successfully");
+        alert("Assigned Successfully");
+    })
+    .catch((e)=>{console.log(e)});
+
+    res.redirect("/")
 
 })
 
