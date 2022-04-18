@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const schema = new mongoose.Schema({
-    assigment:{
+    instruction:{
         type: String,
         required: true
     },
@@ -22,6 +22,6 @@ const schema = new mongoose.Schema({
 
 });
 
-const assignments = mongoose.model('assignments', schema);
+const assignments = mongoose.model('assignmentsList', schema);
 
 module.exports = assignments;
